@@ -1,13 +1,22 @@
-import * as authService from "../services/auth.service.js";
+import { addAdmin } from "../services/auth.service.js";
 
-export const addAdmin = async (req, res) => {
+export const addAdminController = async (req, res) => {
   try {
-    // const adminData = req.body;
-    // const newAdmin = await authService.addAdmin(adminData);
+    const adminData = req.body;
+    const newAdmin = await addAdmin(adminData);
+    const adminResponse = newAdmin.toObject
+      ? newAdmin.toObject()
+      : { ...newAdmin };
+    delete adminResponse.password;
     res
       .status(201)
-      .json({ message: "Admin created successfully", admin: newAdmin });
+      .json({ message: "Admin created successfully", admin: adminResponse });
   } catch (error) {
+    if (error.message.includes("already exists")) {
+      return res
+        .status(400)
+        .json({ message: "Error creating admin", error: error.message });
+    }
     res
       .status(500)
       .json({ message: "Error creating admin", error: error.message });

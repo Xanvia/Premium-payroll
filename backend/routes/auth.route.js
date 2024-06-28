@@ -1,23 +1,8 @@
 import express from "express";
-// import { addAdmin } from "../controllers/auth.controller";
-import { authService } from "../services/auth.service.js";
-
-const addAdmin = async (req, res) => {
-  try {
-    // const adminData = req.body;
-    // const newAdmin = await addAdmin(adminData);
-    res
-      .status(201)
-      .json({ message: "Admin created successfully", admin: newAdmin });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error creating admin", error: error.message });
-  }
-};
+import { addAdminController } from "../controllers/auth.controller.js";
 
 const router = express.Router();
 
-router.post("/admin", addAdmin);
+router.post("/admin", addAdminController);
 
 export default router;

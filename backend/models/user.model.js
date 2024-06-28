@@ -38,6 +38,7 @@ const userSchema = new mongoose.Schema({
     required: false,
     trim: true,
     set: password => bcrypt.hashSync(password, 10) 
+    
   },
 });
 

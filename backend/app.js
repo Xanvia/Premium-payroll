@@ -1,7 +1,8 @@
 import express from "express";
 import connect_db from "./config/dbConfig.js";
 import { configDotenv } from "dotenv";
-import router from "./routes/auth.route.js";
+import authRouter from "./routes/auth.route.js";
+import expensesRouter from "./routes/expenses.route.js";
 
 configDotenv();
 
@@ -12,7 +13,8 @@ connect_db(db_url);
 app.use(express.json());
 app.set("query parser", "extended");
 
-app.use("/api/auth", router);
+app.use("/api/auth", authRouter);
+app.use("/api/expenses", expensesRouter);
 
 app.listen(8080, () => {
   console.log("Server is running on port 8080");

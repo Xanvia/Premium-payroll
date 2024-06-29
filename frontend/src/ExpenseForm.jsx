@@ -53,6 +53,7 @@ function ExpenseForm() {
       expenseValue: "",
       expenseDescription: "",
       file: "",
+      subsistance: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -61,6 +62,20 @@ function ExpenseForm() {
   });
 
   const totalMilage = formik.values.daysWorked * formik.values.carMiles * 0.45;
+
+  let hourText = "";
+  let hourValue = "";
+
+  if (formik.values.subsistance < 8) {
+    hourText = "Under 8 Hours";
+    hourValue = "5";
+  } else if (formik.values.subsistance < 13) {
+    hourText = "8 Hours - 12 Hours";
+    hourValue = "10";
+  } else {
+    hourText = "Over 12 Hours";
+    hourValue = "15";
+  }
 
   const renderExpenseForms = () => {
     let forms = [];
@@ -325,7 +340,6 @@ function ExpenseForm() {
               Total Mileage Claim
             </label>
             <p>{`${formik.values.daysWorked} days x ${formik.values.carMiles} miles/day x £ 0.45 = £ ${totalMilage}`}</p>
-            {/* This can be dynamically calculated based on Formik values if needed */}
           </div>
         </div>
 
@@ -354,31 +368,21 @@ function ExpenseForm() {
               className="form-control"
               id="subsistance"
               placeholder="Hours away from home"
-              // value={formData.subsistance}
+              min={0}
+              value={formik.values.subsistance}
+              onChange={formik.handleChange}
             />
           </div>
           <div className="col-md-4 text-start">
-            <label className="form-label">Under 8 hours</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="£ 5.00 /day"
-              value="£ 5.00 /day"
-              disabled
-            />
+            <label className="form-label">{hourText}</label>
+
+            <p>{`£ ${hourValue}.00 /day`}</p>
           </div>
           <div className="col-md-4 text-start">
             <label htmlFor="subsistanceCalculation" className="form-label">
               Subsistance Calculation
             </label>
-            <input
-              type="text"
-              className="form-control"
-              id="subsistanceCalculation"
-              placeholder="£ 0.00"
-              // value={formData.subsistanceCalculation}
-              disabled
-            />
+            <p>£ 0.00</p>
           </div>
         </div>
         <div className="form-check mb-3 text-start">
@@ -386,8 +390,7 @@ function ExpenseForm() {
             type="checkbox"
             className="form-check-input"
             id="declaration"
-            // checked={formData.declaration}
-            // onChange={handleChange}
+            checked
           />
           <label className="form-check-label" htmlFor="declaration">
             I declare that the information submitted is true and correct. Any

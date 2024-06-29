@@ -36,6 +36,8 @@ function ExpenseForm() {
     siteAddress: Yup.string().required("Site address is required"),
     transport: Yup.string().required("Transport method is required"),
     carMiles: Yup.number().required("Car miles is required"),
+    expenseName: Yup.string().required("Please insert the Expense Name"),
+    file: Yup.string().required("Please upload the Expense Receipt"),
   });
 
   const formik = useFormik({
@@ -47,6 +49,10 @@ function ExpenseForm() {
       siteAddress: "",
       transport: "car",
       carMiles: "",
+      expenseName: "",
+      expenseValue: "",
+      expenseDescription: "",
+      file: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -73,15 +79,21 @@ function ExpenseForm() {
                     <input
                       type="text"
                       className="form-control"
-                      id="otherexpensesname"
-                      placeholder="Other Expense Name"
-                      // value={formData.otherExpensesName}
-                      // onChange={handleChange}
+                      name="expenseName"
+                      placeholder="Expense Name"
+                      value={formik.values.expenseName}
+                      onChange={formik.handleChange}
                     />
+                    {formik.errors.expenseName &&
+                      formik.touched.expenseName && (
+                        <div className="error-message text-danger">
+                          {formik.errors.expenseName}
+                        </div>
+                      )}
                   </div>
                   <div className="text-start">
                     <label htmlFor="carMiles" className="form-label">
-                      Car Miles
+                      Other Expenses Value
                     </label>
                     <div className="input-group">
                       <span className="input-group-text">£</span>
@@ -90,8 +102,8 @@ function ExpenseForm() {
                         className="form-control"
                         id="carMiles"
                         placeholder="0"
-                        // value={formData.carMiles}
-                        // onChange={handleChange}
+                        value={formik.values.expenseValue}
+                        onChange={formik.handleChange}
                       />
                     </div>
                   </div>
@@ -116,7 +128,18 @@ function ExpenseForm() {
                   <label for="formFile" class="form-label ">
                     Default file input example
                   </label>
-                  <input class="form-control" type="file" id="formFile" />
+                  <input
+                    class="form-control"
+                    type="file"
+                    id="formFile"
+                    value={formik.values.file}
+                    onChange={formik.handleChange}
+                  />
+                  {formik.errors.file && formik.touched.file && (
+                    <div className="error-message text-danger">
+                      {formik.errors.file}
+                    </div>
+                  )}
                 </div>
                 <div className="col-md-6 mt-auto">
                   <button
